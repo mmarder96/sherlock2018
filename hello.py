@@ -63,7 +63,7 @@ print("Hello World")
 # When running this app on the local machine, default the port to 8000
 port = int(os.getenv('PORT', 8000))
 
-@app.route('/')
+@app.route('/index.html')
 def home():
     return render_template('index.html')
 
