@@ -17,30 +17,33 @@ def read_pdf(filename):
     # combine/split elements in list
     text_by_limit = []
     upload_length = 0
-    max_length = 5000
-    buf = StringIO()
+    max_length = 4000
+    output = ''
     for page in text:
-        page_length = len(page)
+        page_str = bytes(page).decode('utf-8', 'ignore')
+        page_length = len(page_str)
         if upload_length + page_length < max_length:
-            raw_text = str(page).split('\\n')
+            raw_text = page_str.split('\n')
             for raw in raw_text:
                 if raw == '' or raw == ' ':
                     continue
-                line = str(raw).rstrip()
+                line = raw.rstrip() + ' '
 
                 if not line.endswith(':') \
                         and not line.endswith(',') \
                         and not line.endswith('.') \
-                        and not line.endswith('…'):
+                        and not line.endswith('…') \
+                        and not line.endswith(' '):
                     line += '. '
 
-                buf.write(line)
+                output += line
             upload_length += page_length
         else:
-            text_by_limit.append(buf.getvalue())
-            buf = StringIO()
+            text_by_limit.append(output)
+            output = ''
             upload_length = 0
-    buf.close()
+
+    text_by_limit.append(output)
 
     return text_by_limit
 
@@ -88,12 +91,12 @@ def read_docx(filename):
     # so that each element is less than the limit
     text_by_limit = []
     upload_size = 0
-    max_byte_size = 5000
-    buf = StringIO()
+    max_byte_size = 4000
+    output = ''
     for para in text:
-        para_size = len(para.encode('utf-8'))
+        para_size = len(para)
         if upload_size + para_size < max_byte_size:
-            raw_text = str(para).split('\n')
+            raw_text = para.split('\n')
             for raw in raw_text:
                 if raw == '':
                     continue
@@ -105,13 +108,15 @@ def read_docx(filename):
                         and not line.endswith('…'):
                     line += '. '
 
-                buf.write(line)
+                output += line
             upload_size += para_size
         else:
-            text_by_limit.append(buf.getvalue())
-            buf = StringIO()
+            text_by_limit.append(output)
+            output = ''
             upload_size = 0
-    buf.close()
+
+
+    text_by_limit.append(output)
 
     return text_by_limit
 

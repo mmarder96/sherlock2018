@@ -11,17 +11,18 @@ text_to_speech = TextToSpeechV1(
 
 # print(json.dumps(text_to_speech.list_voices(), indent=2))
 
-def text_to_speech_string(text_string, filename, voice):
+def text_to_speech_string(text_string, filename_base, voice):
+    filename = filename_base + '.mp3'
     with open(filename, 'wb') as audio_file:
         audio_file.write(
             text_to_speech.synthesize(
-                text_string, accept='audio/wav',
+                text_string, accept='audio/mp3',
                 voice=voice).content)
 
 
 def text_to_speech_list(text_list, filename_base, voice):
     filenames = []
-    filename_ext = '.wav'
+    filename_ext = '.mp3'
     for i, text in enumerate(text_list):
         filename = filename_base + '_' + str(i) + filename_ext
         filenames.append(filename)
@@ -29,7 +30,7 @@ def text_to_speech_list(text_list, filename_base, voice):
         with open(filename, 'wb') as audio_file:
             audio_file.write(
                 text_to_speech.synthesize(
-                    text, accept='audio/wav', voice=voice).content)
+                    text, accept='audio/mp3', voice=voice).content)
     return filenames
 
 
@@ -57,22 +58,27 @@ def get_voice_list():
 
 
 if __name__ == '__main__':
-    # pdf_filename = 'Lecture11.pdf'
+    # TODO INSERT FILE NAME
     pptx_filename = 'graphics.pptx'
+    pdf_filename = 'documentation.pdf'
     docx_filename = 'Documentation.docx'
 
-    text_string = text_scraper.read_pptx(pptx_filename)
-    text_list = text_scraper.read_docx(docx_filename)
+    text_pptx_string = text_scraper.read_pptx(pptx_filename)
+    text_pdf_list = text_scraper.read_pdf(pdf_filename)
+    text_docx_list = text_scraper.read_docx(docx_filename)
 
-    filename_string = 'output_string.wav'
-    filename_list = 'output_list'
+    filename_pptx_string = 'output_pptx_string'
+    filename_pdf_list = 'output_pdf_list'
+    filename_docx_list = 'output_docx_list'
 
     voices = get_voice_list()
-    # text = ["testing this string", "one job please"]
 
-    text_to_speech_string(text_string, filename_string,
+    text_to_speech_string(text_pptx_string, filename_pptx_string,
                           voices['English']['Michael'])
-    text_to_speech_list(text_list, filename_list, voices['Japanese']['Emi'])
+    text_to_speech_list(text_pdf_list, filename_pdf_list,
+                          voices['Japanese']['Emi'])
+    text_to_speech_list(text_docx_list, filename_docx_list,
+                        voices['Spanish']['Sofia-US'])
 
 # print(json.dumps(text_to_speech.get_pronunciation('Watson', format='spr'),
 #                  indent=2))
