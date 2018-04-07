@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import PyPDF2
 from pptx import Presentation
 from io import StringIO
