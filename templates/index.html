@@ -16,14 +16,11 @@
   <a href="about.html">About</a>
   <img class = "logo" src="SherlockLogo.png" alt="Sherlock Logo" width= "40%"  >
     <div class="container">
-        <h1>Welcome.</h1>
-        <div id="nameInput" class="input-group-lg center-block helloInput">
-            <p class="lead">What is your name??</p>
-            <input id="user_name" type="text" class="form-control" placeholder="name" aria-describedby="sizing-addon1" value="" />
-        </div>
-        <p id="response" class="lead text-center"></p>
-
-        <p id="databaseNames" class="lead text-center"></p>
+        <h1>Investigate your notes.</h1>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+            Select image to upload:
+              <input type="file" name="fileToUpload" id="fileToUpload">
+      </form>
     </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
