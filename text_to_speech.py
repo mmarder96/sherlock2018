@@ -3,7 +3,6 @@ from __future__ import print_function
 import json
 from watson_developer_cloud import TextToSpeechV1
 import text_scraper
-from pydub import AudioSegment
 
 text_to_speech = TextToSpeechV1(
     username='7d084eb0-c888-4d0d-b0cf-1220faa2114a',
@@ -55,17 +54,6 @@ def get_voice_list():
                           'Italian': it_voices, 'Japanese': ja_voices,
                           'Portugese': pt_voices}
     return voices_by_language
-
-
-def combine_audiofiles(filenames_list, filename):
-    sound = AudioSegment.from_mp3(filenames_list[0])
-
-    for i, s in enumerate(filenames_list):
-        if i == 0:
-            continue
-        sound += s
-
-    sound.export(filename, format="mp3")
 
 
 if __name__ == '__main__':

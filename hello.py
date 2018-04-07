@@ -6,14 +6,18 @@ import cf_deployment_tracker
 import os
 import json
 import ibm_db
+import text_scraper
 
 # Emit Bluemix deployment event
+from text_to_speech import text_to_speech_list, text_to_speech_string
+
 cf_deployment_tracker.track()
 
 UPLOAD_FOLDER = 'files'
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+ALLOWED_EXTENSIONS = set(['pptx', 'pdf', 'docx'])
 
 db_name = 'mydb'
 client = None
@@ -82,14 +86,32 @@ def about():
 def social_media():
     return render_template('social_media.html')
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/uploader.html', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
       f = request.files['file']
-      filename=secure_filename(f.filename)
-      f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-      return render_template('uploader.html')
+      lang=request.form['language']
+      if allowed_file(f.filename):
+        filename=secure_filename(f.filename)
+        f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        name, ext = os.path.splitext(filename)
+        if ext =='.docx':
+            text_docx_list = text_scraper.read_docx(filename)
+            text_to_speech_list(text_docx_list,name,lang)
 
+        elif ext=='.pdf':
+            text_pdf_list = text_scraper.read_pdf(filename)
+            text_to_speech_list(text_pdf_list, name, lang)
+        elif ext =='.pptx':
+            text_pptx_string = text_scraper.read_pptx(filename)
+            text_to_speech_string(text_pptx_string,name,lang)
+        return render_template('uploader.html')
+      else:
+        return 'file failed'
 
 # /* Endpoint to greet and add a new visitor to database.
 # * Send a POST request to localhost:8000/api/visitors with body
