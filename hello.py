@@ -19,12 +19,14 @@ if 'VCAP_SERVICES' in os.environ:
     db2info = json.loads(os.environ['VCAP_SERVICES'])['dashDB'][0]
     db2cred = db2info["credentials"]
     appenv = json.loads(os.environ['VCAP_APPLICATION'])
+    print('Found VCAP_SERVICES')
+    print(os.environ['VCAP_SERVICES'])
     #vcap = json.loads(os.getenv('VCAP_SERVICES'))
 else:
     raise ValueError('Expected cloud environment')
 
 db2conn = ibm_db.connect("DATABASE="+db2cred['db']+";HOSTNAME="+db2cred['hostname']+";PORT="+str(db2cred['port'])+";UID="+db2cred['username']+";PWD="+db2cred['password']+";","","")
-#     print('Found VCAP_SERVICES')
+
 #     if 'Db2-Sherlock2018' in vcap:
 #         creds = vcap['Db2-Sherlock2018'][0]['credentials']
 #         user = creds['username']
