@@ -23,7 +23,21 @@ if 'VCAP_SERVICES' in os.environ:
     print(os.environ['VCAP_SERVICES'])
     #vcap = json.loads(os.getenv('VCAP_SERVICES'))
 else:
-    raise ValueError('Expected cloud environment')
+    db2cred = json.loads("""{
+                "port": 50000,
+                "db": "BLUDB",
+                "username": "xmp20848",
+                "ssljdbcurl": "jdbc:db2://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50001/BLUDB:sslConnection=true;",
+                "host": "dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+                "https_url": "https://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+                "dsn": "DATABASE=BLUDB;HOSTNAME=dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net;PORT=50000;PROTOCOL=TCPIP;UID=xmp20848;PWD=w6kpwnbc1z3-3rst;",
+                "hostname": "dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net",
+                "jdbcurl": "jdbc:db2://dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50000/BLUDB",
+                "ssldsn": "DATABASE=BLUDB;HOSTNAME=dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net;PORT=50001;PROTOCOL=TCPIP;UID=xmp20848;PWD=w6kpwnbc1z3-3rst;Security=SSL;",
+                "uri": "db2://xmp20848:w6kpwnbc1z3-3rst@dashdb-txn-sbox-yp-dal09-03.services.dal.bluemix.net:50000/BLUDB",
+                "password": "w6kpwnbc1z3-3rst"
+            }""")
+    #raise ValueError('Expected cloud environment')
 
 db2conn = ibm_db.connect("DATABASE="+db2cred['db']+";HOSTNAME="+db2cred['hostname']+";PORT="+str(db2cred['port'])+";UID="+db2cred['username']+";PWD="+db2cred['password']+";","","")
 
