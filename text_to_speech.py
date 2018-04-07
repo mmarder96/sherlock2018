@@ -68,8 +68,7 @@ if __name__ == '__main__':
     filename_list = 'output_list'
 
     voices = get_voice_list()
-
-    print(text_list[0])
+    # text = ["testing this string", "one job please"]
 
     text_to_speech_string(text_string, filename_string,
                           voices['English']['Michael'])

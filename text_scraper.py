@@ -1,10 +1,48 @@
+import PyPDF2
 from pptx import Presentation
 from io import StringIO
 import docx
 
 
 def read_pdf(filename):
-    pass  # TODO insert here
+    # read doc
+    pdf = PyPDF2.PdfFileReader(filename)
+    text = []
+    numPages = pdf.getNumPages()
+    for page in range(0, numPages):
+        pageObj = pdf.getPage(page)
+        content = pageObj.extractText().encode('utf-8', 'ignore')
+        text.append(content)
+
+    # combine/split elements in list
+    text_by_limit = []
+    upload_length = 0
+    max_length = 5000
+    buf = StringIO()
+    for page in text:
+        page_length = len(page)
+        if upload_length + page_length < max_length:
+            raw_text = str(page).split('\\n')
+            for raw in raw_text:
+                if raw == '' or raw == ' ':
+                    continue
+                line = str(raw).rstrip()
+
+                if not line.endswith(':') \
+                        and not line.endswith(',') \
+                        and not line.endswith('.') \
+                        and not line.endswith('…'):
+                    line += '. '
+
+                buf.write(line)
+            upload_length += page_length
+        else:
+            text_by_limit.append(buf.getvalue())
+            buf = StringIO()
+            upload_length = 0
+    buf.close()
+
+    return text_by_limit
 
 
 def read_pptx(filename):
