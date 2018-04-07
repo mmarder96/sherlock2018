@@ -45,7 +45,7 @@ def home():
 
 @app.route('/')
 def about():
-    return render_template('about.html', methods=['GET'])
+    return render_template('about.html', methods=['POST'])
 
 
 # /* Endpoint to greet and add a new visitor to database.
