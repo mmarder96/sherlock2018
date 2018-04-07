@@ -3,6 +3,7 @@ from __future__ import print_function
 import json
 from watson_developer_cloud import TextToSpeechV1
 import text_scraper
+from pydub import AudioSegment
 
 text_to_speech = TextToSpeechV1(
     username='7d084eb0-c888-4d0d-b0cf-1220faa2114a',
@@ -26,7 +27,6 @@ def text_to_speech_list(text_list, filename_base, voice):
     for i, text in enumerate(text_list):
         filename = filename_base + '_' + str(i) + filename_ext
         filenames.append(filename)
-        print(len(text.encode('utf-8')))
         with open(filename, 'wb') as audio_file:
             audio_file.write(
                 text_to_speech.synthesize(
@@ -57,11 +57,22 @@ def get_voice_list():
     return voices_by_language
 
 
+def combine_audiofiles(filenames_list, filename):
+    sound = AudioSegment.from_mp3(filenames_list[0])
+
+    for i, s in enumerate(filenames_list):
+        if i == 0:
+            continue
+        sound += s
+
+    sound.export(filename, format="mp3")
+
+
 if __name__ == '__main__':
     # TODO INSERT FILE NAME
     pptx_filename = 'graphics.pptx'
-    pdf_filename = 'documentation.pdf'
-    docx_filename = 'Documentation.docx'
+    pdf_filename = 'shortpdf.pdf'
+    docx_filename = 'test3.docx'
 
     text_pptx_string = text_scraper.read_pptx(pptx_filename)
     text_pdf_list = text_scraper.read_pdf(pdf_filename)
@@ -75,10 +86,13 @@ if __name__ == '__main__':
 
     text_to_speech_string(text_pptx_string, filename_pptx_string,
                           voices['English']['Michael'])
-    text_to_speech_list(text_pdf_list, filename_pdf_list,
-                          voices['Japanese']['Emi'])
-    text_to_speech_list(text_docx_list, filename_docx_list,
-                        voices['Spanish']['Sofia-US'])
+    filename_pdf_list = text_to_speech_list(text_pdf_list, filename_pdf_list,
+                                            voices['Japanese']['Emi'])
+    filename_docx_list = text_to_speech_list(text_docx_list,
+                                             filename_docx_list,
+                                             voices['Spanish']['Sofia-US'])
+
+    # combine_audiofiles(filename_pdf_list, "final output file")
 
 # print(json.dumps(text_to_speech.get_pronunciation('Watson', format='spr'),
 #                  indent=2))

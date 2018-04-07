@@ -11,7 +11,7 @@ def read_pdf(filename):
     numPages = pdf.getNumPages()
     for page in range(0, numPages):
         pageObj = pdf.getPage(page)
-        content = pageObj.extractText().encode('utf-8', 'ignore')
+        content = pageObj.extractText()
         text.append(content)
 
     # combine/split elements in list
@@ -20,12 +20,11 @@ def read_pdf(filename):
     max_length = 4000
     output = ''
     for page in text:
-        page_str = bytes(page).decode('utf-8', 'ignore')
-        page_length = len(page_str)
+        page_length = len(page)
         if upload_length + page_length < max_length:
-            raw_text = page_str.split('\n')
+            raw_text = page.split('\n')
             for raw in raw_text:
-                if raw == '' or raw == ' ':
+                if raw == '':
                     continue
                 line = raw.rstrip() + ' '
 
@@ -114,7 +113,6 @@ def read_docx(filename):
             text_by_limit.append(output)
             output = ''
             upload_size = 0
-
 
     text_by_limit.append(output)
 
