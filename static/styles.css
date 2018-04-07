@@ -12,6 +12,9 @@ h4 {
 .submitButton{
   margin-right: 200px;
 }
+div.content{
+  margin-top: 15px;
+}
 li {
     display: inline;
     float: left;
