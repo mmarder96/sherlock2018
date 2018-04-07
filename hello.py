@@ -84,7 +84,6 @@ def upload_file():
       f = request.files['file']
       filename=secure_filename(f.filename)
       f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-      #return 'file uploaded successfully'
       return render_template('uploader.html')
 
 
