@@ -4,6 +4,7 @@ import atexit
 import cf_deployment_tracker
 import os
 import json
+import ibm_db
 
 # Emit Bluemix deployment event
 cf_deployment_tracker.track()
@@ -15,26 +16,33 @@ client = None
 db = None
 
 if 'VCAP_SERVICES' in os.environ:
-    vcap = json.loads(os.getenv('VCAP_SERVICES'))
-    print('Found VCAP_SERVICES')
-    if 'cloudantNoSQLDB' in vcap:
-        creds = vcap['cloudantNoSQLDB'][0]['credentials']
-        user = creds['username']
-        password = creds['password']
-        url = 'https://' + creds['host']
-        client = Cloudant(user, password, url=url, connect=True)
-        db = client.create_database(db_name, throw_on_exists=False)
-elif os.path.isfile('vcap-local.json'):
-    with open('vcap-local.json') as f:
-        vcap = json.load(f)
-        print('Found local VCAP_SERVICES')
-        creds = vcap['services']['cloudantNoSQLDB'][0]['credentials']
-        user = creds['username']
-        password = creds['password']
-        url = 'https://' + creds['host']
-        client = Cloudant(user, password, url=url, connect=True)
-        db = client.create_database(db_name, throw_on_exists=False)
+    db2info = json.loads(os.environ['VCAP_SERVICES'])['dashDB'][0]
+    db2cred = db2info["credentials"]
+    appenv = json.loads(os.environ['VCAP_APPLICATION'])
+    #vcap = json.loads(os.getenv('VCAP_SERVICES'))
+else:
+    raise ValueError('Expected cloud environment')
 
+db2conn = ibm_db.connect("DATABASE="+db2cred['db']+";HOSTNAME="+db2cred['hostname']+";PORT="+str(db2cred['port'])+";UID="+db2cred['username']+";PWD="+db2cred['password']+";","","")
+#     print('Found VCAP_SERVICES')
+#     if 'Db2-Sherlock2018' in vcap:
+#         creds = vcap['Db2-Sherlock2018'][0]['credentials']
+#         user = creds['username']
+#         password = creds['password']
+#         url = 'https://' + creds['host']
+#         client = Cloudant(user, password, url=url, connect=True)
+#         db = client.create_database(db_name, throw_on_exists=False)
+# elif os.path.isfile('vcap-local.json'):
+#     with open('vcap-local.json') as f:
+#         vcap = json.load(f)
+#         print('Found local VCAP_SERVICES')
+#         creds = vcap['services']['cloudantNoSQLDB'][0]['credentials']
+#         user = creds['username']
+#         password = creds['password']
+#         url = 'https://' + creds['host']
+#         client = Cloudant(user, password, url=url, connect=True)
+#         db = client.create_database(db_name, throw_on_exists=False)
+print("Hello World")
 # On Bluemix, get the port number from the environment variable PORT
 # When running this app on the local machine, default the port to 8000
 port = int(os.getenv('PORT', 8000))
@@ -42,6 +50,11 @@ port = int(os.getenv('PORT', 8000))
 @app.route('/')
 def home():
     return render_template('index.html')
+
+@app.route('/')
+def about():
+    return render_template('about.html', methods=['POST'])
+
 
 # /* Endpoint to greet and add a new visitor to database.
 # * Send a POST request to localhost:8000/api/visitors with body
