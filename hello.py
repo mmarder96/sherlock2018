@@ -67,7 +67,7 @@ port = int(os.getenv('PORT', 8000))
 def home():
     return render_template('index.html')
 
-@app.route('/templates/about.html')
+@app.route('/about.html')
 #def about():
 #    return render_template('about.html', methods=['POST'])
 
