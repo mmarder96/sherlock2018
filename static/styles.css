@@ -2,7 +2,7 @@
   width: 200px;
 }
 
-h4 {
+nav {
   margin-left: 10px;
 }
 .selectImage{
@@ -11,11 +11,4 @@ h4 {
 
 .submitButton{
   margin-right: 200px;
-}
-div.content{
-  margin-top: 15px;
-}
-li {
-    display: inline;
-    float: left;
 }

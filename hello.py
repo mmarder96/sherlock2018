@@ -78,6 +78,10 @@ def home():
 def about():
     return render_template('about.html')
 
+@app.route('/social_media.html')
+def social_media():
+    return render_template('social_media.html')
+
 @app.route('/uploader.html', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
