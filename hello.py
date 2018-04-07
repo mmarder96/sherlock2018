@@ -101,15 +101,45 @@ def upload_file():
         name, ext = os.path.splitext(filename)
         if ext =='.docx':
             text_docx_list = text_scraper.read_docx(filename)
-            text_to_speech_list(text_docx_list,name,lang)
+            audioName=text_to_speech_list(text_docx_list,name,lang)
 
         elif ext=='.pdf':
             text_pdf_list = text_scraper.read_pdf(filename)
-            text_to_speech_list(text_pdf_list, name, lang)
+            audioName =text_to_speech_list(text_pdf_list, name, lang)
         elif ext =='.pptx':
             text_pptx_string = text_scraper.read_pptx(filename)
-            text_to_speech_string(text_pptx_string,name,lang)
-        return render_template('uploader.html')
+            audioName =text_to_speech_string(text_pptx_string,name,lang)
+        return '''<!DOCTYPE html>
+        <html lang="en">
+        <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sherlock 2018 - Investigate Your Notes</title>
+
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/styles.css" rel="stylesheet">
+</head>
+
+<body><nav>
+  <h4><a href="index.html">Home</a> |
+  <a href="about.html">About</a> |
+  <a href="social_media.html">Social Media</a> </h4>
+</nav>
+
+
+  <!-- Changes to logo location -->
+  <div class = "content" align = "center">
+    <img class = "logo" src="../static/SherlockLogo.png" alt="Sherlock Logo" width= "40%">
+      <div class="container">
+          <h1>Investigate your notes.</h1>
+          <audio controls>
+            <source src="''' + str(audioName[0]) + '''"type="audio/mp3">
+          </audio>
+</body>
+</html>
+'''
       else:
         return 'file failed'
 

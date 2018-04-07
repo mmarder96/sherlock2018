@@ -18,6 +18,7 @@ def text_to_speech_string(text_string, filename_base, voice):
             text_to_speech.synthesize(
                 text_string, accept='audio/mp3',
                 voice=voice).content)
+    return filename
 
 
 def text_to_speech_list(text_list, filename_base, voice):
