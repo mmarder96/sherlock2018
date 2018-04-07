@@ -49,12 +49,12 @@ def read_docx(filename):
     # combine/split elements in list,
     # so that each element is less than the limit
     text_by_limit = []
-    upload_length = 0
-    max_length = 5000
+    upload_size = 0
+    max_byte_size = 5000
     buf = StringIO()
     for para in text:
-        para_length = len(para)
-        if upload_length + para_length < max_length:
+        para_size = len(para.encode('utf-8'))
+        if upload_size + para_size < max_byte_size:
             raw_text = str(para).split('\n')
             for raw in raw_text:
                 if raw == '':
@@ -68,11 +68,11 @@ def read_docx(filename):
                     line += '. '
 
                 buf.write(line)
-            upload_length += para_length
+            upload_size += para_size
         else:
             text_by_limit.append(buf.getvalue())
             buf = StringIO()
-            upload_length = 0
+            upload_size = 0
     buf.close()
 
     return text_by_limit
