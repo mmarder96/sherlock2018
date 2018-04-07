@@ -12,13 +12,15 @@ text_to_speech = TextToSpeechV1(
 # print(json.dumps(text_to_speech.list_voices(), indent=2))
 
 def text_to_speech_string(text_string, filename_base, voice):
+    filenames=[]
     filename = filename_base + '.mp3'
+    filename.append(filename)
     with open(filename, 'wb') as audio_file:
         audio_file.write(
             text_to_speech.synthesize(
                 text_string, accept='audio/mp3',
                 voice=voice).content)
-    return filename
+    return filenames
 
 
 def text_to_speech_list(text_list, filename_base, voice):
