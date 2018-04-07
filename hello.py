@@ -1,5 +1,6 @@
 from cloudant import Cloudant
 from flask import Flask, render_template, request, jsonify
+from werkzeug import secure_filename
 import atexit
 import cf_deployment_tracker
 import os
@@ -9,7 +10,10 @@ import ibm_db
 # Emit Bluemix deployment event
 cf_deployment_tracker.track()
 
+UPLOAD_FOLDER = 'files'
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 db_name = 'mydb'
 client = None
@@ -73,6 +77,14 @@ def home():
 @app.route('/about.html')
 def about():
     return render_template('about.html')
+
+@app.route('/uploader.html', methods = ['GET', 'POST'])
+def upload_file():
+   if request.method == 'POST':
+      f = request.files['file']
+      filename=secure_filename(f.filename)
+      f.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+      return render_template('uploader.html')
 
 
 # /* Endpoint to greet and add a new visitor to database.

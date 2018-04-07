@@ -3,7 +3,7 @@
 }
 
 h4 {
-  margin-left: 15px;
+  margin-left: 10px;
 }
 .selectImage{
   margin-right: 120px;
@@ -11,4 +11,11 @@ h4 {
 
 .submitButton{
   margin-right: 200px;
+}
+div.content{
+  margin-top: 15px;
+}
+li {
+    display: inline;
+    float: left;
 }
