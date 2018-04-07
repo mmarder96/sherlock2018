@@ -1,5 +1,5 @@
 ---
 applications:
  - name: Sherlock2018
-   random-route: true
+   host: Sherlock2018
    memory: 128M
