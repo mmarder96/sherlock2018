@@ -79,7 +79,7 @@ def about():
     return render_template('about.html')
 
 @app.route('/social_media.html')
-def about():
+def social_media():
     return render_template('social_media.html')
 
 @app.route('/uploader.html', methods = ['GET', 'POST'])
