@@ -3,5 +3,5 @@ cf-deployment-tracker==1.0.4
 cloudant==2.4.0
 ibm_db==2.0.8a
 PyPDF2==1.26.0
-pptx==0.6.7
-docx==0.8.6
+python-pptx==0.6.7
+python-docx==0.8.6
